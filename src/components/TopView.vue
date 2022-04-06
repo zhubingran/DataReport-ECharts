@@ -8,17 +8,17 @@
       </el-col>
       <el-col :span="6">
         <el-card shadow="hover">
-          <total-sales></total-sales>
+          <total-orders></total-orders>
         </el-card>
       </el-col>
       <el-col :span="6">
         <el-card shadow="hover">
-          <total-sales></total-sales>
+          <today-user></today-user>
         </el-card>
       </el-col>
       <el-col :span="6">
         <el-card shadow="hover">
-          <total-sales></total-sales>
+          <total-users></total-users>
         </el-card>
       </el-col>
     </el-row>
@@ -26,10 +26,13 @@
 </template>
 
 <script>
-import TotalSales from '../TotalSales'
+import TotalSales from './TotalSales.vue'
+import TotalOrders from './TotalOrders.vue'
+import TotalUsers from './TotalUsers.vue'
+import TodayUser from './TodayUser.vue'
 export default {
   components: {
-    TotalSales
+    TotalSales, TotalOrders, TotalUsers, TodayUser
   }
 }
 </script>
