@@ -22,7 +22,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .title {
   font-size: 12px;
   color: #999;
