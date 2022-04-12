@@ -118,7 +118,9 @@ export default {
           },
           axisLabel: {
             color: '#333'
-          }
+          },
+
+
         },
         yAxis: {
           axisLine: {

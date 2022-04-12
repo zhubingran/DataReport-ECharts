@@ -16,15 +16,24 @@
               <div class="chart">
                 <div class="chart-title">搜索量</div>
                 <div class="chart-data">192,935</div>
-                <v-chart :options="searchNumberOption"></v-chart>
+                <v-chart :options="searchUserOption"></v-chart>
               </div>
             </div>
             <div class="table-wrapper">
               <el-table :data="tableData">
-                <el-table-column></el-table-column>
+                <el-table-column prop="rank" label="排名"></el-table-column>
+                <el-table-column prop="keyword" label="关键词"></el-table-column>
+                <el-table-column prop="count" label="总搜索量"></el-table-column>
+                <el-table-column prop="users" label="搜索用户数"></el-table-column>
               </el-table>
               <!-- 翻页器 -->
-              <el-pagination></el-pagination>
+              <el-pagination
+                layout="prev,pager,next"
+                :total="100"
+                :page-size="4"
+                background
+                @current-change="onPageChange"
+              ></el-pagination>
             </div>
           </div>
         </template>
@@ -57,10 +66,15 @@ export default {
     return {
       searchUserOption: {
         xAxis: {
-          type: 'category'
+          type: 'category',
+          // 消除左侧间距
+          boundaryGap: false
         },
         yAxis: {
-          show: false
+          show: false,
+          // 自定义y轴坐标系范围
+          min: 0,
+          max: 350
         },
         series: [
           {
@@ -68,7 +82,14 @@ export default {
             areaStyle: {
               color: 'rgba(95,187,255,.5)'
             },
-            data: [100, 150, 200, 250, 200, 150, 100, 50, 100, 150]
+            data: [100, 150, 200, 250, 200, 150, 100, 50, 100, 150],
+            lineStyle: {
+              color: 'rgba(95,187,255,.5)'
+            },
+            itemStyle: {
+              opacity: 0
+            },
+            smooth: true
           }
         ],
         grid: {
@@ -79,9 +100,20 @@ export default {
         }
       },
       searchNumberOption: {},
-      tableData: [],
+      // 列表数据
+      tableData: [
+        { id: 1, rank: 1, keyword: '北京', count: 100, users: 90, range: '90%' },
+        { id: 2, rank: 2, keyword: '北京', count: 100, users: 90, range: '90%' },
+        { id: 3, rank: 3, keyword: '北京', count: 100, users: 90, range: '90%' },
+        { id: 4, rank: 4, keyword: '北京', count: 100, users: 90, range: '90%' }
+      ],
       radioSelect: '品类',
       categoryOption: {}
+    }
+  },
+  methods: {
+    onPageChange (page) {
+
     }
   }
 }
@@ -141,6 +173,16 @@ export default {
           .echarts {
             height: 50px;
           }
+        }
+      }
+      .table-wrapper {
+        flex: 1;
+        margin-top: 20px;
+        padding: 0 20px 20px;
+        .el-pagination {
+          display: flex;
+          justify-content: flex-end;
+          margin-top: 15px;
         }
       }
     }
