@@ -12,10 +12,17 @@ import TopView from '../components/TopView'
 import SalesView from '../components/SalesView'
 import BottomView from '../components/BottomView'
 import MapView from '../components/MapView'
+import { wordcloud } from '../api/index'
+
+
+
 export default {
   name: 'HomeView',
   components: {
     TopView, SalesView, BottomView, MapView
+  },
+  mounted () {
+    wordcloud().catch(err => alert(err.message))
   }
 }
 </script>
@@ -23,7 +30,6 @@ export default {
 <style>
 .home {
   width: 100%;
-  height: 100%;
   background: #eee;
   padding: 20px;
   box-sizing: border-box;
