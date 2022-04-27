@@ -42,7 +42,7 @@
               <div class="list-item" v-for="item in rankData" :key="item.no">
                 <div :class="['list-item-no',+item.no <=3 ? 'top-no' : '']">{{item.no}}</div>
                 <div class="list-item-name">{{item.name}}</div>
-                <div class="list-item-monry">{{item.monry}}</div>
+                <div class="list-item-monry">{{item.money}}</div>
               </div>
             </div>
           </div>
@@ -53,7 +53,9 @@
 </template>
 
 <script>
+import commonDataMixin from '../mixins/commonDataMixin'
 export default {
+  mixins: [commonDataMixin],
   data () {
     return {
       activeIndex: '1',
@@ -92,8 +94,24 @@ export default {
         ]
       },
       chartOption: {
+
+      }
+    }
+  },
+  methods: {
+    onMenuSelect (index) {
+      this.activeIndex = index
+      if (index === '1') {
+        this.render(this.orderFullYear, this.orderFullYearAxis, '年度销售额')
+      } else {
+        this.render(this.userFullYear, this.userFullYearAxis, '年度访问量')
+      }
+    },
+    // 动态渲染图表
+    render (data, axis, title) {
+      this.chartOption = {
         title: {
-          text: '年度销售额',
+          text: title,
           textStyle: {
             fontSize: 12,
             color: '#666'
@@ -103,7 +121,7 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+          data: axis,
           axisTick: {
             // 短竖线和label放在一起
             alignWithLabel: true,
@@ -144,7 +162,7 @@ export default {
           {
             type: 'bar',
             barWidth: '35%',
-            data: [200, 250, 300, 350, 300, 250, 200, 250, 300, 350, 300, 250]
+            data
           }
         ],
         color: '#3398DB',
@@ -154,29 +172,17 @@ export default {
           right: 60,
           bottom: 50
         }
-      },
-      rankData: [
-        {
-          no: 1,
-          name: '麦当劳',
-          monry: '323,234'
-        },
-        {
-          no: 2,
-          name: '麦当劳',
-          monry: '323'
-        },
-        {
-          no: 3,
-          name: '麦当劳',
-          monry: '323'
-        }
-      ]
+      }
     }
   },
-  methods: {
-    onMenuSelect (index) {
-      this.activeIndex = index
+  watch: {
+    orderFullYear () {
+      this.render(this.orderFullYear, this.orderFullYearAxis, '年度销售额')
+    }
+  },
+  computed: {
+    rankData () {
+      return this.activeIndex === '1' ? this.orderRank : this.userRank
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <common-card title="累计用户数" value="2,456,840">
+  <common-card title="累计用户数" :value="userToday">
     <template>
       <!-- 图表 -->
       <v-chart :options="getOptions()"></v-chart>
@@ -7,10 +7,10 @@
     <template v-slot:footer>
       <div class="total-users-footer">
         <span>日同比</span>
-        <span class="emphasis">8.73%</span>
+        <span class="emphasis">{{userGrowthLastDay}}</span>
         <div class="increase"></div>
         <span class="month">月同比</span>
-        <span class="emphasis">35.91%</span>
+        <span class="emphasis">{{userGrowthLastMonth}}</span>
         <div class="decrease"></div>
       </div>
     </template>
@@ -19,11 +19,13 @@
 
 <script>
 import commonCardMixin from '../mixins/commonCardMixin'
+import commonDataMixin from '../mixins/commonDataMixin'
 export default {
-  mixins: [commonCardMixin],
+  mixins: [commonCardMixin, commonDataMixin],
   methods: {
     getOptions () {
       return {
+        tooltip: {},
         xAxis: {
           type: 'value',
           show: false
@@ -33,16 +35,18 @@ export default {
           show: false
         },
         series: [{
+          name: '今日平台用户数',
           type: 'bar',
-          data: [200],
+          data: [this.userTodayNumber],
           barWidth: '10px',
           itemStyle: {
             color: '#45c946'
           }
         },
         {
+          name: '上月平台用户数',
           type: 'bar',
-          data: [250],
+          data: [this.userTotal],
           barWidth: '10px',
           barGap: '-100%',
           z: "-1",
@@ -52,7 +56,7 @@ export default {
         },
         {
           type: 'custom', // 自定义数据
-          data: [200],
+          data: [this.userTodayNumber],
           renderItem: (params, api) => {
             const value = api.value(0)
             const endPoint = api.coord([value, 0]) // 找到x=200 y=0这个点的坐标

@@ -26,6 +26,7 @@
 </template>
 
 <script>
+// 顶部四个卡片
 import TotalSales from './TotalSales.vue'
 import TotalOrders from './TotalOrders.vue'
 import TotalUsers from './TotalUsers.vue'
