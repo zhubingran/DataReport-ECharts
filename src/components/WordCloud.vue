@@ -1,33 +1,29 @@
 <template>
-  <ve-wordcloud :data="chartData" height="100%"></ve-wordcloud>
+  <ve-wordcloud :data="chartData" height="100%" />
 </template>
 
 <script>
+import commonDataMixin from '../mixins/commonDataMixin'
 export default {
+  mixins: [commonDataMixin],
+  watch: {
+    wordCloud () {
+      const data = []
+      this.wordCloud.forEach(item => {
+        data.push({
+          name: item.word,
+          value: item.count
+        })
+      })
+      this.chartData = {
+        columns: ['name', 'value'],
+        rows: data
+      }
+    }
+  },
   data () {
     return {
-      chartData: {
-        columns: ['name', 'value'],
-        rows: [{
-          name: '慕课网',
-          value: 100
-        }, {
-          name: '慕课网2',
-          value: 80
-        }, {
-          name: '慕课网3',
-          value: 60
-        }, {
-          name: '慕课网4',
-          value: 40
-        }, {
-          name: '慕课网5',
-          value: 20
-        }, {
-          name: '慕课网6',
-          value: 10
-        }]
-      }
+      chartData: {}
     }
   }
 }

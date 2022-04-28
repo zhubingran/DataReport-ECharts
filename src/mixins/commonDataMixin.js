@@ -32,6 +32,19 @@ function wrapperArray(obj, key) {
     return obj && obj[key] ? obj[key] : []
 }
 
+// 封装对象
+function wrapperObject(obj, key) {
+    if (obj && key.indexOf('.') >= 0) {
+        const keys = key.split('.')
+        keys.forEach((key) => {
+            obj = obj[key]
+        })
+        return obj
+    } else {
+        return obj && obj[key] ? obj[key] : {}
+    }
+}
+
 export default {
     computed: {
         reportData() {
@@ -95,11 +108,11 @@ export default {
         },
         // 日同比
         userGrowthLastDay() {
-            return wrapperPercentage(this.reportData, 'userGrowthLastDay')
+            return wrapperNumber(this.reportData, 'userGrowthLastDay')
         },
         // 月同比
         userGrowthLastMonth() {
-            return wrapperPercentage(this.reportData, 'userGrowthLastMonth')
+            return wrapperNumber(this.reportData, 'userGrowthLastMonth')
         },
         userTotal() {
             return wrapperOriginalNumber(this.reportData, 'orderToday')
@@ -123,6 +136,19 @@ export default {
         },
         userRank() {
             return wrapperArray(this.reportData, 'userRank')
+        },
+        // 针对品类数据
+        category1() {
+            return wrapperObject(this.reportData, 'category.data1')
+        },
+        // 针对商品数据
+        category2() {
+            return wrapperObject(this.reportData, 'category.data2')
+        }
+    },
+    methods: {
+        format(val) {
+            return format(val)
         }
     },
     // 获取provide数据

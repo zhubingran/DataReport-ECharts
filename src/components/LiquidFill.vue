@@ -1,38 +1,33 @@
 <template>
-  <ve-liquidfill :data="chartData" height="100%" :settings="chartSettings"></ve-liquidfill>
+  <ve-liquidfill :data="chartData" height="100%" :settings="chartSettings" />
 </template>
 
 <script>
+import commonDataMixin from '../mixins/commonDataMixin'
 function getColor (value) {
-  return value > 0 && value <= 0.5 ? 'rgba(97,216,0,.7' :
-    value > 0.5 && value <= 0.8 ? 'rgba(204,178,26,.7' :
-      value > 0.8 ? 'rgba(241,47,28,.7' : '#c7c7cb'
+  return value > 0 && value <= 0.5 ? 'rgba(97,216,0,.7)'
+    : value > 0.5 && value <= 0.8 ? 'rgba(204,178,26,.7)'
+      : value > 0.8 ? 'rgba(241,47,28,.7)' : '#c7c7cb'
 }
 
 export default {
-  data () {
-    return {
-      chartData: {
+  mixins: [commonDataMixin],
+  watch: {
+    userGrowthLastMonth () {
+      this.chartData = {
         columns: ['title', 'percent'],
         rows: [{
-          title: 'rate',
-          percent: 0.68
+          title: '用户月同比增长',
+          percent: this.userGrowthLastMonth / 100
         }]
-      },
-      chartSettings: {
-
       }
-    }
-  },
-  mounted () {
-    this.chartSettings = {
-      seriesMap: {
-        'rate': {
-          radius: '80%',
-          label: {
-            normal: {
+      this.chartSettings = {
+        seriesMap: {
+          用户月同比增长: {
+            radius: '80%',
+            label: {
               formatter: (v) => {
-                return `${Math.floor(v.data.value * 100)}%` // 取整
+                return `${(v.data.value * 100).toFixed(2)}%`
               },
               textStyle: {
                 fontSize: 36,
@@ -42,30 +37,34 @@ export default {
               position: ['50%', '50%'],
               insideColor: '#fff'
             },
-
-          },
-          outline: {
+            outline: {
+              itemStyle: {
+                borderColor: '#aaa4a4',
+                borderWidth: 1,
+                color: 'none',
+                shadowBlur: 0,
+                shadowColor: '#fff'
+              },
+              borderDistance: 0
+            },
+            backgroundStyle: {
+              color: '#fff'
+            },
             itemStyle: {
-              borderColor: '#aaa4a4',
-              borderWidth: 1,
-              color: 'none',
               shadowBlur: 0,
               shadowColor: '#fff'
             },
-            borderDistance: 0
-          },
-          backgroundStyle: {
-            color: '#fff'
-          },
-          itemStyle: {
-            shadowBlur: 0,
-            shadowColor: '#fff'
-          },
-          // 波纹振幅
-          amplitude: 8,
-          color: [getColor(this.chartData.rows[0].percent)]
+            amplitude: 8,
+            color: [getColor(this.chartData.rows[0].percent)]
+          }
         }
       }
+    }
+  },
+  data () {
+    return {
+      chartData: {},
+      chartSettings: {}
     }
   }
 }
